@@ -15,7 +15,8 @@ import java.util.UUID;
 public class BlackjackSessionHandler extends StompSessionHandlerAdapter {
 
     // TODO Change to your own name. This is the name you will use to register with the server
-    private static final String NAME = UUID.randomUUID().toString().substring(0, 6);
+    //private static final String NAME = UUID.randomUUID().toString().substring(0, 6);
+    private static final String NAME = "nitish";
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {

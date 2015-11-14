@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * Handles all frames sent by the server, regardless of which destination
@@ -55,9 +56,19 @@ public class BlackjackFrameHandler implements StompFrameHandler {
             this.playerId = ((PlayerInfo) o).getPlayerId();
 
             // After we get the playerId, you'll probably want to check if we can bet.
-            // If so, you could do that here.
+            // If so, you could do that here
+
+            //logic : add a random generator for initial bet selection, with value less than 1000 and in multiples of 10
+
+            int max = 5;
+            int min = 1;
+            Random rn = new Random();
+            int bet = rn.nextInt(max - min + 1) + min;
+
+            bet = bet * 10;
+
             // TODO Add custom implementation below for variable bet sizes.
-            session.send("/app/bet", new BetWrapper(playerId, 100));
+            session.send("/app/bet", new BetWrapper(playerId, bet));
 
         } else if (o.getClass() == BlackjackErrorWrapper.class) {
             // If it gets here, there was an error that took place. Refer to the BlackjackErrorCode
