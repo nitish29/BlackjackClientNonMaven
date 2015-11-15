@@ -91,11 +91,16 @@ public class BlackjackFrameHandler implements StompFrameHandler {
 
                 /*
                 * Algorithm:
-                *  - get dealer's total hand value
+                *
                 *  - for each player
-                 *  - get player's total hand value
-                *   - if player's total hand value is less than dealer
-                *   - check whether to  HIT, STAND, SPLIT, DOUBLE, SURRENDER based on dealer's total hand value
+                *  - get player's total hand value
+                *   - if player's total hand value is less than 18
+                *    - if player's hand value consists of a pair,
+                *       - call action SPLIT
+                *    - else
+                *       - call action HIT
+                *   - if player's hand value is greater than 18
+                *       - call action STAND
                 *
                 * */
 
@@ -103,9 +108,9 @@ public class BlackjackFrameHandler implements StompFrameHandler {
                 //Dealer dealer = game.getDealer();
                 //List<Hand> dealerHands = dealer.getHands();
 
-                int dealerHandValue = game.getDealerUpCard().getCardValue();
-
-//                for (Hand dealerHand : dealerHands) {
+//                int dealerHandValue = game.getDealerUpCard().getCardValue();
+//
+//                 for (Hand dealerHand : dealerHands) {
 //                    dealerHandValue += dealerHand.getHandValue();
 //                }
 
@@ -124,7 +129,7 @@ public class BlackjackFrameHandler implements StompFrameHandler {
 
 
 
-                if( playerHandValue < dealerHandValue) {
+                if( playerHandValue < 18) {
 
 
                    // System.out.println("HIT");
