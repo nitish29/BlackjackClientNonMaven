@@ -1,8 +1,6 @@
 package com.lactaoen.blackjack.client;
 
-import com.lactaoen.blackjack.model.Action;
-import com.lactaoen.blackjack.model.PlayerInfo;
-import com.lactaoen.blackjack.model.Round;
+import com.lactaoen.blackjack.model.*;
 import com.lactaoen.blackjack.model.wrapper.ActionWrapper;
 import com.lactaoen.blackjack.model.wrapper.BetWrapper;
 import com.lactaoen.blackjack.model.wrapper.BlackjackErrorWrapper;
@@ -71,6 +69,8 @@ public class BlackjackFrameHandler implements StompFrameHandler {
             session.send("/app/bet", new BetWrapper(playerId, bet));
 
         } else if (o.getClass() == BlackjackErrorWrapper.class) {
+
+            //System.out.println ( BlackjackErrorWrapper.class.);
             // If it gets here, there was an error that took place. Refer to the BlackjackErrorCode
             // class in the server for the error types. You can choose to handle those errors here
             // if you so choose.
@@ -88,10 +88,97 @@ public class BlackjackFrameHandler implements StompFrameHandler {
 
             } else if(game.getGameStatus() == Round.HAND_IN_PROGRESS) {
 
-                // TODO Change the action being sent to be based off your current hand.
-                ActionWrapper actionWrapper = new ActionWrapper(playerId, 0, Action.STAND);
 
-                session.send("/app/action", actionWrapper);
+                /*
+                * Algorithm:
+                *  - get dealer's total hand value
+                *  - for each player
+                 *  - get player's total hand value
+                *   - if player's total hand value is less than dealer
+                *   - check whether to  HIT, STAND, SPLIT, DOUBLE, SURRENDER based on dealer's total hand value
+                *
+                * */
+
+
+                //Dealer dealer = game.getDealer();
+                //List<Hand> dealerHands = dealer.getHands();
+
+                int dealerHandValue = game.getDealerUpCard().getCardValue();
+
+//                for (Hand dealerHand : dealerHands) {
+//                    dealerHandValue += dealerHand.getHandValue();
+//                }
+
+                Player player = game.getPlayers().get(0);
+
+
+                List<Hand> playerHands = player.getHands();
+
+                int playerHandValue = 0;
+
+                for (Hand playerHand : playerHands) {
+
+                    playerHandValue += playerHand.getHandValue();
+
+                }
+
+                
+
+                if( playerHandValue < dealerHandValue) {
+
+
+                   // System.out.println("HIT");
+                    ActionWrapper actionWrapper = new ActionWrapper(player.getPlayerId(), 0, Action.HIT);
+                    session.send("/app/action", actionWrapper);
+
+
+                } else {
+
+
+                    //System.out.println("STAND");
+                    ActionWrapper actionWrapper = new ActionWrapper(player.getPlayerId(), 0, Action.STAND);
+                    session.send("/app/action", actionWrapper);
+
+                }
+
+//
+//                List<Player> players = game.getPlayers();
+//
+//                for (Player player : players) {
+//
+//                    List<Hand> playerHands = player.getHands();
+//
+//                    int playerHandValue = 0;
+//
+//                    for (Hand playerHand : playerHands) {
+//
+//                        playerHandValue += playerHand.getHandValue();
+//
+//                    }
+//
+//                    if( playerHandValue < dealerHandValue) {
+//
+//                        ActionWrapper actionWrapper = new ActionWrapper(player.getPlayerId(), 0, Action.HIT);
+//                        session.send("/app/action", actionWrapper);
+//
+//
+//                    } else {
+//
+//
+//                        ActionWrapper actionWrapper = new ActionWrapper(player.getPlayerId(), 0, Action.STAND);
+//                        session.send("/app/action", actionWrapper);
+//
+//                    }
+//
+//
+//
+//
+//                }
+
+
+                // TODO Change the action being sent to be based off your current hand.
+                //ActionWrapper actionWrapper = new ActionWrapper(playerId, 0, Action.STAND);
+                //session.send("/app/action", actionWrapper);
             }
 
         } else {
