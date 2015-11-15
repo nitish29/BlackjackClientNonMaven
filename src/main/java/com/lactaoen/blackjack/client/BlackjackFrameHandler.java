@@ -122,7 +122,7 @@ public class BlackjackFrameHandler implements StompFrameHandler {
 
                 }
 
-                
+
 
                 if( playerHandValue < dealerHandValue) {
 
@@ -177,8 +177,8 @@ public class BlackjackFrameHandler implements StompFrameHandler {
 
 
                 // TODO Change the action being sent to be based off your current hand.
-                //ActionWrapper actionWrapper = new ActionWrapper(playerId, 0, Action.STAND);
-                //session.send("/app/action", actionWrapper);
+                ActionWrapper actionWrapper = new ActionWrapper(playerId, 0, Action.STAND);
+                session.send("/app/action", actionWrapper);
             }
 
         } else {
